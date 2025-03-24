@@ -1,0 +1,1 @@
+export default function Timetable() { return <div className='text-center p-10 text-xl'>Timetable Page</div>; }

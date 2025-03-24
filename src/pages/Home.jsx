@@ -1,0 +1,1 @@
+export default function Home() { return <div className='text-center p-10 text-3xl'>Welcome to the GCSE Planner 🎓</div>; }

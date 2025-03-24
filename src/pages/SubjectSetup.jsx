@@ -1,0 +1,1 @@
+export default function SubjectSetup() { return <div className='text-center p-10 text-xl'>Subject Selection Page</div>; }
