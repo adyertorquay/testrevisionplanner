@@ -84,66 +84,76 @@ const GCSEPlanner = () => {
 
   const generateRevisionEvents = () => {
     const revisionEvents = [];
-    const sessionMap = {};
     const revisionDays = eachDayOfInterval({ start: startDate, end: endDate });
+    const sessionMap = {};
     const daySlots = {};
+    const earlyPhaseEnd = new Date('2025-04-21');
 
     revisionDays.forEach(day => {
-      const dateKey = format(day, 'yyyy-MM-dd');
+      const key = format(day, 'yyyy-MM-dd');
       const dayName = format(day, 'EEEE');
-      daySlots[dateKey] = availability[dayName] || [];
-      sessionMap[dateKey] = [];
+      daySlots[key] = availability[dayName] || [];
+      sessionMap[key] = [];
     });
 
-    const examSchedule = selectedSubjects
-      .map(subject => ({
-        subject,
-        exams: (examDates[subject] || []).map(parseISO)
-      }))
-      .flatMap(s =>
-        s.exams.map(date => ({
-          subject: s.subject,
-          examDate: date
-        }))
-      )
-      .sort((a, b) => compareAsc(a.examDate, b.examDate));
+    const examSchedule = selectedSubjects.map(subject => {
+      const exams = (examDates[subject] || []).map(parseISO);
+      const finalExam = exams.sort(compareAsc)[exams.length - 1];
+      return { subject, exams, finalExam };
+    }).sort((a, b) => compareAsc(a.finalExam, b.finalExam));
 
-    // Lock revision day before each exam
-    examSchedule.forEach(({ subject, examDate }) => {
-      const dayBefore = format(subDays(examDate, 1), 'yyyy-MM-dd');
-      const slots = daySlots[dayBefore];
-      if (slots?.length) {
-        const time = slots[0];
-        revisionEvents.push({ title: `Revise ${subject}`, date: dayBefore, time, color: '#1E40AF' });
-        sessionMap[dayBefore].push(subject);
-      }
+    // Day-before exam revision
+    examSchedule.forEach(({ subject, exams }) => {
+      exams.forEach(examDate => {
+        const dayBefore = format(subDays(examDate, 1), 'yyyy-MM-dd');
+        const slots = daySlots[dayBefore] || [];
+        for (const slot of slots) {
+          if (!sessionMap[dayBefore].includes(subject)) {
+            revisionEvents.push({ title: `Revise ${subject}`, date: dayBefore, time: slot, color: '#1E40AF' });
+            sessionMap[dayBefore].push(subject);
+            break;
+          }
+        }
+      });
     });
 
-    // Balanced revision (before intensive)
+    // Balanced revision between 4th–21st April
+    let roundRobinIndex = 0;
     revisionDays.forEach(day => {
-      const dateKey = format(day, 'yyyy-MM-dd');
-      if (isBefore(day, intensiveStart)) {
-        const slots = daySlots[dateKey] || [];
-        const availableSubjects = selectedSubjects.filter(sub => !sessionMap[dateKey]?.includes(sub));
-        if (availableSubjects.length && slots.length) {
-          const subject = availableSubjects[0];
-          revisionEvents.push({ title: `Revise ${subject}`, date: dateKey, time: slots[0], color: '#3B82F6' });
-          sessionMap[dateKey].push(subject);
+      const key = format(day, 'yyyy-MM-dd');
+      const slots = daySlots[key];
+      if (!slots.length || sessionMap[key].length >= slots.length) return;
+
+      const isEarlyPhase = isBefore(day, earlyPhaseEnd);
+      if (isEarlyPhase) {
+        for (let i = 0; i < slots.length; i++) {
+          const subject = selectedSubjects[roundRobinIndex % selectedSubjects.length];
+          if (!sessionMap[key].includes(subject)) {
+            revisionEvents.push({ title: `Revise ${subject}`, date: key, time: slots[i], color: '#3B82F6' });
+            sessionMap[key].push(subject);
+            roundRobinIndex++;
+          }
         }
       }
     });
 
-    // Final push revision before each exam
+    // Focused post-Easter revision
     revisionDays.forEach(day => {
-      const dateKey = format(day, 'yyyy-MM-dd');
-      const slots = daySlots[dateKey] || [];
-      if (!slots.length) return;
+      const key = format(day, 'yyyy-MM-dd');
+      const slots = daySlots[key];
+      if (!slots.length || sessionMap[key].length >= slots.length) return;
 
-      for (const { subject, examDate } of examSchedule) {
-        if (isBefore(day, examDate) && !sessionMap[dateKey].includes(subject)) {
-          revisionEvents.push({ title: `Revise ${subject}`, date: dateKey, time: slots[0], color: '#60A5FA' });
-          sessionMap[dateKey].push(subject);
-          break;
+      const isPostEaster = !isBefore(day, earlyPhaseEnd);
+      if (isPostEaster) {
+        for (const slot of slots) {
+          for (const { subject, exams } of examSchedule) {
+            const nextExam = exams.find(d => isBefore(day, d));
+            if (nextExam && !sessionMap[key].includes(subject)) {
+              revisionEvents.push({ title: `Revise ${subject}`, date: key, time: slot, color: '#60A5FA' });
+              sessionMap[key].push(subject);
+              break;
+            }
+          }
         }
       }
     });
