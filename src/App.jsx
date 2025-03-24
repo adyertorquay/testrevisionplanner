@@ -54,7 +54,7 @@ const GCSEPlanner = () => {
   const calendarRef = useRef();
   const startDate = new Date('2025-04-04');
   const endDate = new Date('2025-07-19');
-  const intensiveStart = new Date('2025-04-22');
+  const intensiveStart = new Date('2025-05-01');
 
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [availability, setAvailability] = useState({
