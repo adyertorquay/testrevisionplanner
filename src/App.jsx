@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { format, parseISO, eachDayOfInterval, isBefore, compareAsc, subDays } from 'date-fns';
 import jsPDF from 'jspdf';
@@ -15,67 +16,11 @@ const allSubjects = [
 ];
 
 const examTimes = {
-'2025-05-06': { subject: 'Health & Social', time: '09:00' },
-'2025-05-06': { subject: 'Construction', time: '14:00' },
-
-'2025-05-09': { subject: 'Business', time: '14:00' },
-
-'2025-05-12': { subject: 'English Literature', time: '09:00' },
-
-'2025-05-13': { subject: 'Religious Studies', time: '09:00' },
-'2025-05-13': { subject: 'Biology', time: '14:00' },
-
-'2025-05-14': { subject: 'Geography', time: '09:00' },
-'2025-05-14': { subject: 'Media Studies', time: '14:00' },
-
-'2025-05-15': { subject: 'Maths', time: '09:00' },
-
-'2025-05-16': { subject: 'History', time: '09:00' },
-'2025-05-16': { subject: 'Business', time: '14:00' },
-
-'2025-05-19': { subject: 'Chemistry', time: '09:00' },
-
-'2025-05-20': { subject: 'English Literature', time: '09:00' },
-
-'2025-05-21': { subject: 'French', time: '09:00' },
-'2025-05-21': { subject: 'Religious Studies', time: '14:00' },
-
-'2025-05-22': { subject: 'Physics', time: '09:00' },
-'2025-05-22': { subject: 'Media Studies', time: '14:00' },
-'2025-05-22': { subject: 'Sport', time: '14:00' },
-
-'2025-05-23': { subject: 'English Language', time: '09:00' },
-
-'2025-06-02': { subject: 'Statistics', time: '09:00' },
-'2025-06-02': { subject: 'Automotive', time: '14:00' },
-
-'2025-06-04': { subject: 'Maths', time: '09:00' },
-
-'2025-06-05': { subject: 'History', time: '09:00' },
-'2025-06-05': { subject: 'French', time: '14:00' },
-
-'2025-06-06': { subject: 'English Language', time: '09:00' },
-'2025-06-06': { subject: 'Geography', time: '14:00' },
-
-'2025-06-09': { subject: 'Biology', time: '09:00' },
-'2025-06-09': { subject: 'IT', time: '14:00' },
-
-'2025-06-10': { subject: 'Spanish', time: '09:00' },
-'2025-06-10': { subject: 'History', time: '14:00' },
-
-'2025-06-11': { subject: 'Maths', time: '09:00' },
-
-'2025-06-12': { subject: 'Geography', time: '09:00' },
-'2025-06-12': { subject: 'Hospitality & Catering', time: '14:00' },
-
-'2025-06-13': { subject: 'Chemistry', time: '09:00' },
-'2025-06-13': { subject: 'Statistics', time: '14:00' },
-
-'2025-06-16': { subject: 'Physics', time: '09:00' },
-
-'2025-06-17': { subject: 'Spanish', time: '09:00' },
-
-'2025-06-18': { subject: 'Design Technology', time: '09:00' },
+  '2025-05-06': { subject: 'Construction', time: '09:00' },
+  '2025-05-09': { subject: 'Business', time: '13:30' },
+  '2025-05-13': { subject: 'Biology', time: '09:00' },
+  '2025-05-14': { subject: 'Geography', time: '13:30' },
+  '2025-05-15': { subject: 'Maths', time: '09:00' },
   // Add more times here based on full list
 };
 
@@ -164,7 +109,7 @@ const GCSEPlanner = () => {
         const slots = daySlots[dayBefore] || [];
         for (const slot of slots) {
           if (!sessionMap[dayBefore].includes(subject)) {
-            revisionEvents.push({ title: Revise ${subject}, date: dayBefore, time: slot, color: '#1E40AF' });
+            revisionEvents.push({ title: `Revise ${subject}`, date: dayBefore, time: slot, color: '#1E40AF' });
             sessionMap[dayBefore].push(subject);
             break;
           }
@@ -184,7 +129,7 @@ const GCSEPlanner = () => {
         for (let i = 0; i < slots.length; i++) {
           const subject = selectedSubjects[roundRobinIndex % selectedSubjects.length];
           if (!sessionMap[key].includes(subject)) {
-            revisionEvents.push({ title: Revise ${subject}, date: key, time: slots[i], color: '#3B82F6' });
+            revisionEvents.push({ title: `Revise ${subject}`, date: key, time: slots[i], color: '#3B82F6' });
             sessionMap[key].push(subject);
             roundRobinIndex++;
           }
@@ -204,7 +149,7 @@ const GCSEPlanner = () => {
           for (const { subject, exams } of examSchedule) {
             const nextExam = exams.find(d => isBefore(day, d));
             if (nextExam && !sessionMap[key].includes(subject)) {
-              revisionEvents.push({ title: Revise ${subject}, date: key, time: slot, color: '#60A5FA' });
+              revisionEvents.push({ title: `Revise ${subject}`, date: key, time: slot, color: '#60A5FA' });
               sessionMap[key].push(subject);
               break;
             }
@@ -219,7 +164,7 @@ const GCSEPlanner = () => {
   const examEvents = Object.entries(examDates).flatMap(([subject, dates]) =>
     selectedSubjects.includes(subject)
       ? dates.map(date => ({
-          title: ${subject} Exam${examTimes[date] ? ' – ' + examTimes[date].time : ''},
+          title: `${subject} Exam${examTimes[date] ? ' – ' + examTimes[date].time : ''}`,
           date,
           time: examTimes[date]?.time || '09:00',
           color: '#FF5733'
