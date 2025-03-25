@@ -170,27 +170,27 @@ const GCSEPlanner = () => {
   const revisionEvents = generateRevisionEvents();
 
   const exportICS = () => {
-    const allEvents = [...examEvents, ...revisionEvents].map(e => {
-      const [year, month, day] = e.date.split('-').map(Number);
-      const [hour, minute] = (e.time || '09:00').split(':').map(Number);
-      return {
-        start: [year, month, day, hour, minute],
-        duration: { hours: 1 },
-        title: e.title,
-        status: 'CONFIRMED'
-      };
-    });
+  const revisionOnlyEvents = revisionEvents.map(e => {
+    const [year, month, day] = e.date.split('-').map(Number);
+    const [hour, minute] = (e.time || '09:00').split(':').map(Number);
+    return {
+      start: [year, month, day, hour, minute],
+      duration: { hours: 1 },
+      title: e.title,
+      status: 'CONFIRMED'
+    };
+  });
 
-    createEvents(allEvents, (error, value) => {
-      if (error) return console.error(error);
-      const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'gcse-timetable.ics';
-      a.click();
-    });
-  };
+  createEvents(revisionOnlyEvents, (error, value) => {
+    if (error) return console.log(error);
+    const blob = new Blob([value], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'gcse-revision-only.ics';
+    a.click();
+  });
+};
 
   return (
     <div className="p-6 font-sans">
