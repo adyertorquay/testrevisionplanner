@@ -16,7 +16,7 @@ const allSubjects = [
 ];
 
 const examTimes = {
-'2025-05-06': { subject: 'Health & Social', time: '09:00' },
+{ title: 'Health & Social Exam', start: '2025-05-06', allDay: true },
 '2025-05-06-2': { subject: 'Construction', time: '14:00' },
 
 '2025-05-09': { subject: 'Business', time: '14:00' },
