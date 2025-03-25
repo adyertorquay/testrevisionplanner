@@ -136,3 +136,4 @@ const exportICS = () => {
     a.click();
   });
 };
+export default GCSEPlanner;
