@@ -15,46 +15,70 @@ const allSubjects = [
   'Sport', 'Design Technology', 'Media Studies', 'Hospitality & Catering'
 ];
 
-  const events = [
-  { title: 'Construction Exam', start: '2025-05-06', allDay: true },
-  { title: 'Business Exam', start: '2025-05-09', allDay: true },
-  { title: 'English Literature Exam', start: '2025-05-12', allDay: true },
-  { title: 'Biology Exam', start: '2025-05-13', allDay: true },
-  { title: 'Religious Studies Exam', start: '2025-05-13', allDay: true },
-  { title: 'Geography Exam', start: '2025-05-14', allDay: true },
-  { title: 'Media Studies Exam', start: '2025-05-14', allDay: true },
-  { title: 'Maths Exam', start: '2025-05-15', allDay: true },
-  { title: 'History Exam', start: '2025-05-16', allDay: true },
-  { title: 'Business Exam', start: '2025-05-16', allDay: true },
-  { title: 'Chemistry Exam', start: '2025-05-19', allDay: true },
-  { title: 'English Literature Exam', start: '2025-05-20', allDay: true },
-  { title: 'French Exam', start: '2025-05-21', allDay: true },
-  { title: 'Religious Studies Exam', start: '2025-05-21', allDay: true },
-  { title: 'Physics Exam', start: '2025-05-22', allDay: true },
-  { title: 'Media Studies Exam', start: '2025-05-22', allDay: true },
-  { title: 'Sport Exam', start: '2025-05-22', allDay: true },
-  { title: 'English Language Exam', start: '2025-05-23', allDay: true },
-  { title: 'Statistics Exam', start: '2025-06-02', allDay: true },
-  { title: 'Automotive Exam', start: '2025-06-02', allDay: true },
-  { title: 'Maths Exam', start: '2025-06-04', allDay: true },
-  { title: 'History Exam', start: '2025-06-05', allDay: true },
-  { title: 'French Exam', start: '2025-06-05', allDay: true },
-  { title: 'English Language Exam', start: '2025-06-06', allDay: true },
-  { title: 'Geography Exam', start: '2025-06-06', allDay: true },
-  { title: 'Biology Exam', start: '2025-06-09', allDay: true },
-  { title: 'IT Exam', start: '2025-06-09', allDay: true },
-  { title: 'Spanish Exam', start: '2025-06-10', allDay: true },
-  { title: 'History Exam', start: '2025-06-10', allDay: true },
-  { title: 'Maths Exam', start: '2025-06-11', allDay: true },
-  { title: 'Geography Exam', start: '2025-06-12', allDay: true },
-  { title: 'Hospitality & Catering Exam', start: '2025-06-12', allDay: true },
-  { title: 'Chemistry Exam', start: '2025-06-13', allDay: true },
-  { title: 'Statistics Exam', start: '2025-06-13', allDay: true },
-  { title: 'Physics Exam', start: '2025-06-16', allDay: true },
-  { title: 'Spanish Exam', start: '2025-06-17', allDay: true },
-  { title: 'Design Technology Exam', start: '2025-06-18', allDay: true }
-];
+const examTimes = {
+'2025-05-06': { subject: 'Health & Social', time: '09:00' },
+'2025-05-06': { subject: 'Construction', time: '14:00' },
 
+'2025-05-09': { subject: 'Business', time: '14:00' },
+
+'2025-05-12': { subject: 'English Literature', time: '09:00' },
+
+'2025-05-13': { subject: 'Religious Studies', time: '09:00' },
+'2025-05-13': { subject: 'Biology', time: '14:00' },
+
+'2025-05-14': { subject: 'Geography', time: '09:00' },
+'2025-05-14': { subject: 'Media Studies', time: '14:00' },
+
+'2025-05-15': { subject: 'Maths', time: '09:00' },
+
+'2025-05-16': { subject: 'History', time: '09:00' },
+'2025-05-16': { subject: 'Business', time: '14:00' },
+
+'2025-05-19': { subject: 'Chemistry', time: '09:00' },
+
+'2025-05-20': { subject: 'English Literature', time: '09:00' },
+
+'2025-05-21': { subject: 'French', time: '09:00' },
+'2025-05-21': { subject: 'Religious Studies', time: '14:00' },
+
+'2025-05-22': { subject: 'Physics', time: '09:00' },
+'2025-05-22': { subject: 'Media Studies', time: '14:00' },
+'2025-05-22': { subject: 'Sport', time: '14:00' },
+
+'2025-05-23': { subject: 'English Language', time: '09:00' },
+
+'2025-06-02': { subject: 'Statistics', time: '09:00' },
+'2025-06-02': { subject: 'Automotive', time: '14:00' },
+
+'2025-06-04': { subject: 'Maths', time: '09:00' },
+
+'2025-06-05': { subject: 'History', time: '09:00' },
+'2025-06-05': { subject: 'French', time: '14:00' },
+
+'2025-06-06': { subject: 'English Language', time: '09:00' },
+'2025-06-06': { subject: 'Geography', time: '14:00' },
+
+'2025-06-09': { subject: 'Biology', time: '09:00' },
+'2025-06-09': { subject: 'IT', time: '14:00' },
+
+'2025-06-10': { subject: 'Spanish', time: '09:00' },
+'2025-06-10': { subject: 'History', time: '14:00' },
+
+'2025-06-11': { subject: 'Maths', time: '09:00' },
+
+'2025-06-12': { subject: 'Geography', time: '09:00' },
+'2025-06-12': { subject: 'Hospitality & Catering', time: '14:00' },
+
+'2025-06-13': { subject: 'Chemistry', time: '09:00' },
+'2025-06-13': { subject: 'Statistics', time: '14:00' },
+
+'2025-06-16': { subject: 'Physics', time: '09:00' },
+
+'2025-06-17': { subject: 'Spanish', time: '09:00' },
+
+'2025-06-18': { subject: 'Design Technology', time: '09:00' },
+  // Add more times here based on full list
+};
 
 const examDates = {
   'Health and Social': ['2025-05-06'],
